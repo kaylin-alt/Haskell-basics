@@ -1,0 +1,108 @@
+-- HC2T1 - Task 1: Checking Types in GHCi
+-- Expected types:
+-- 42              :: Int
+-- 3.14            :: Fractional a => a (usually Double)
+-- "Haskell"       :: String
+-- 'Z'             :: Char
+-- True && False   :: Bool
+
+-- HC2T2 - Task 2: Function Type Signatures and Implementations
+
+add :: Int -> Int -> Int
+add x y = x + y
+
+isEven :: Int -> Bool
+isEven n = n mod 2 == 0
+
+concatStrings :: String -> String -> String
+concatStrings s1 s2 = s1 ++ s2
+
+-- HC2T3 - Task 3: Immutable Variables
+
+myAge :: Int
+myAge = 25
+
+piValue :: Double
+piValue = 3.14159
+
+greeting :: String
+greeting = "Hello, Haskell!"
+
+isHaskellFun :: Bool
+isHaskellFun = True
+
+-- Trying to modify one (uncomment the below line will cause a compile-time error)
+-- myAge = 30  -- Error: Multiple declarations of ‘myAge’
+
+-- HC2T4 - Task 4: Converting Between Infix and Prefix Notations
+
+-- Infix to prefix:
+prefix1 = (+) 5 3
+prefix2 = (*) 10 4
+prefix3 = (&&) True False
+
+-- Prefix to infix:
+infix1 = 7 + 2
+infix2 = 6 * 5
+infix3 = True && False
+
+-- HC2T5 - Task 5: Defining and Using Functions
+
+circleArea :: Float -> Float
+circleArea radius = pi * radius * radius
+
+maxOfThree :: Int -> Int -> Int -> Int
+maxOfThree a b c = max a (max b c)
+
+-- Test examples (can be run in GHCi)
+-- circleArea 3.0
+-- maxOfThree 10 22 15
+
+-- HC2T6 - Task 6: Understanding Int vs Integer
+
+smallNumber :: Int
+smallNumber = 2 ^ 62
+
+bigNumber :: Integer
+bigNumber = 2 ^ 127
+
+-- Try evaluating this in GHCi:
+-- 2 ^ 64 :: Int
+-- This may overflow and give a negative number or runtime error depending on system
+
+-- HC2T7 - Task 7: Boolean Expressions
+
+boolExpr1 = True && True      -- evaluates to True
+boolExpr2 = False || False    -- evaluates to False
+boolExpr3 = not False         -- evaluates to True
+boolExpr4 = 5 > 10            -- evaluates to False
+
+main :: IO ()
+main = do
+    print ("HC2T2 Tests:")
+    print (add 10 5)
+    print (isEven 4)
+    print (concatStrings "Hello, " "World!")
+
+    print ("HC2T4 Tests:")
+    print prefix1
+    print prefix2
+    print prefix3
+    print infix1
+    print infix2
+    print infix3
+
+    print ("HC2T5 Tests:")
+    print (circleArea 3.0)
+    print (maxOfThree 12 7 15)
+
+    print ("HC2T6 Tests:")
+    print smallNumber
+    print bigNumber
+    -- print (2 ^ 64 :: Int) -- Uncommenting may cause overflow
+
+    print ("HC2T7 Tests:")
+    print boolExpr1
+    print boolExpr2
+    print boolExpr3
+    print boolExpr4
