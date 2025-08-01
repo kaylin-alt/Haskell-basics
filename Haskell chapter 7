@@ -1,0 +1,196 @@
+HC7T1: Implement an Eq instance for a custom data type
+Define a data type Color representing Red, Green, and Blue. Implement the Eq type class for it so that colors of the same type are considered equal.
+
+module Main where
+
+data Color = Red | Green | Blue
+  deriving Show  
+
+instance Eq Color where
+  Red   == Red   = True
+  Green == Green = True
+  Blue  == Blue  = True
+  _     == _     = False
+
+main :: IO ()
+main = do
+  print (Red == Red)     
+  print (Red == Green)   
+  print (Blue == Blue)   
+  print (Green == Blue)  
+
+  print (Red /= Blue)   
+
+
+2. HC7T2: Implement an Ord instance for a custom data type
+Using the Color type from HC7T1, implement the Ord type class so that Red < Green < Blue.
+
+
+data Color = Red | Green | Blue deriving Show
+
+instance Eq Color where
+  Red   == Red   = True
+  Green == Green = True
+  Blue  == Blue  = True
+  _     == _     = False
+
+instance Ord Color where
+  compare Red   Red   = EQ
+  compare Red   Green = LT
+  compare Red   Blue  = LT
+  compare Green Red   = GT
+  compare Green Green = EQ
+  compare Green Blue  = LT
+  compare Blue  Red    = GT
+  compare Blue  Green  = GT
+  compare Blue  Blue   = EQ
+
+main :: IO ()
+main = do
+  print (Red < Green)    
+  print (Green < Blue)   
+  print (Blue < Red)
+
+ 
+  3.HC7T3: Implement a function using multiple constraints
+Write a function compareValues that takes two arguments of type a and returns the larger one. Ensure that a is both an instance of Eq and Ord.
+
+compareValues :: (Eq a, Ord a) => a -> a -> a
+compareValues x y
+  | x == y    = x
+  | x > y     = x
+  | otherwise = y
+
+main :: IO ()
+main = do
+  print (compareValues 5 3)    
+  print (compareValues 2 7)    
+  print (compareValues 4 4)    
+
+
+  4.HC7T4: Create a custom type and implement Show and Read
+Define a data type Shape with constructors Circle Double and Rectangle Double Double. Implement Show and Read instances for it.
+
+ata Shape = Circle Double | Rectangle Double Double
+  deriving (Show, Read)
+
+main :: IO ()
+main = do
+  let c = Circle 3.5
+      r = Rectangle 4.0 5.0
+  print c                   
+  print r                     
+  
+  print (read "Circle 2.0"    :: Shape)       
+  print (read "Rectangle 1 2" :: Shape)       
+
+
+5.HC7T5: Implement a function that uses Num constraints
+Write a function squareArea that calculates the area of a square given its side length. Ensure that the function works with any numeric type.
+
+squareArea :: Num a => a -> a
+squareArea s = s * s
+
+main :: IO ()
+main = do
+  print (squareArea 3)  
+  print (squareArea 2.5)   
+
+
+  6.HC7T6: Use the Integral and Floating type classes
+Define a function circleCircumference that takes a radius and returns the circumference. Ensure it works with both Integral and Floating numbers.
+
+circleCircumference :: (Integral a, Floating b) => a -> b
+circleCircumference r = 2 * pi * fromIntegral r
+
+main :: IO ()
+main = do
+  print (circleCircumference (5 :: Int))     
+  print (circleCircumference (7 :: Integer)) 
+
+
+7.HC7T7: Implement a function using Bounded and Enum
+Create a function nextColor that takes a Color and returns the next color in sequence. If it reaches the last color, it should wrap around.
+
+data Color = Red | Green | Blue
+  deriving (Show, Eq, Enum, Bounded)
+
+nextColor :: Color -> Color
+nextColor c
+  | c == maxBound = minBound
+  | otherwise     = succ c
+
+main :: IO ()
+main = do
+  print (nextColor Red)     
+  print (nextColor Green)   
+  print (nextColor Blue)    
+
+
+8.HC7T8: Use Read to parse a value from a string
+Write a function parseShape that takes a String and returns a Shape. The function should return Nothing for invalid inputs.
+
+data Shape = Circle Double | Rectangle Double Double
+  deriving (Show, Read)
+
+parseShape :: String -> Maybe Shape
+parseShape s = case reads s of
+  [(sh, "")] -> Just sh
+  _          -> Nothing
+
+main :: IO ()
+main = do
+  print (parseShape "Circle 2.0")         
+  print (parseShape "Rectangle 3 4")      
+  print (parseShape "Triangle 1 2")       
+  print (parseShape "Circle 2.0 xyz")    
+
+
+9.HC7T9: Define a type class with multiple instances
+Create a type class Describable with a method describe. Implement it for Bool and Shape.
+
+data Shape = Circle Double | Rectangle Double Double
+  deriving (Show, Read)
+
+class Describable a where
+  describe :: a -> String
+
+instance Describable Bool where
+  describe True  = "True value"
+  describe False = "False value"
+
+instance Describable Shape where
+  describe (Circle r)      = "Circle of radius " ++ show r
+  describe (Rectangle w h) = "Rectangle of width " ++ show w ++ " and height " ++ show h
+
+main :: IO ()
+main = do
+  putStrLn (describe True)                    
+  putStrLn (describe False)                    
+  putStrLn (describe (Circle 1.5))             
+
+
+  10.HC7T10: Use a function with multiple type class constraints
+Write a function describeAndCompare that takes two Describable values and returns the description of the larger one
+
+
+
+  data Shape = Circle Double | Rectangle Double Double
+  deriving (Show, Eq)
+
+-- Ordering shapes by area
+area :: Shape -> Double
+area (Circle r)      = pi * r * r
+area (Rectangle w h) = w * h
+
+instance Ord Shape where
+  compare a b = compare (area a) (area b)
+
+class Describab a where
+  describe :: a -> String
+
+instance Describable Bool where
+  describe True  = "True value"
+  describe False = "False value"
+
+instance Describab

@@ -1,0 +1,228 @@
+HC9T1: Define a Parametric Type Synonym
+Create a parametric type synonym called Entity a to represent various types of entities with addresses.
+
+module Main where
+
+type Entity a = (String, a) 
+
+user :: Entity String
+user = ("123 Main St", "Alice")
+
+account :: Entity Int
+account = ("456 Market Rd", 1000)
+
+main :: IO ()
+main = do
+  print user
+  print account
+
+
+  2.HC9T2: Implement a Parametric Data Type
+Create a data type Box a with two constructors, Empty and Has a, to represent a box that may or may not contain a value.
+
+module Main where
+
+data Box a = Empty | Has a
+  deriving (Show)
+
+emptyBox :: Box Int
+emptyBox = Empty
+
+boxedValue :: Box String
+boxedValue = Has "Hello"
+
+main :: IO ()
+main = do
+  print emptyBox    
+  print boxedValue    
+
+
+
+3.HC9T3: Define a Function to Add Values in a Box
+Create a function addN that takes a number and a Box a. If the box contains a number, add the given number to it.
+
+module Main where
+
+data Box a = Empty | Has a
+  deriving (Show)
+
+addN :: Num a => a -> Box a -> Box a
+addN n Empty     = Empty
+addN n (Has x)   = Has (x + n)
+
+box1 :: Box Int
+box1 = Has 10
+
+box2 :: Box Int
+box2 = Empty
+
+main :: IO ()
+main = do
+  print (addN 5 box1)  
+  print (addN 5 box2)  
+
+
+
+4.HC9T4: Extract a Value from a Box
+Create a function extract that takes a default value and a Box a. It returns the value inside the box or the default if the box is empty.
+
+module Main where
+
+data Box a = Empty | Has a
+  deriving (Show)
+
+extract :: a -> Box a -> a
+extract def Empty    = def
+extract _   (Has x)  = x
+
+box1 :: Box Int
+box1 = Has 42
+
+box2 :: Box Int
+box2 = Empty
+
+main :: IO ()
+main = do
+  print (extract 0 box1)  
+  print (extract 0 box2)  
+
+
+
+  5.HC9T5: Create a Parametric Data Type with Record Syntax
+Define a parametric data type Shape a with constructors Circle and Rectangle, both containing a color field of type a.
+
+{-# LANGUAGE DuplicateRecordFields #-}
+
+module Main where
+
+data Shape a
+  = Circle    { color :: a, radius :: Double }
+  | Rectangle { color :: a, width  :: Double, height :: Double }
+  deriving Show
+
+-- Examples
+circle1 :: Shape String
+circle1 = Circle { color = "Red", radius = 3.0 }
+
+rect1 :: Shape String
+rect1 = Rectangle { color = "Blue", width = 4.0, height = 5.0 }
+
+main :: IO ()
+main = do
+  print circle1
+  print rect1
+
+
+  6.HC9T6: Define a Recursive Data Type
+Define a recursive data type Tweet that represents a tweet with content, likes, and comments, which are themselves tweets.
+
+module Main where
+
+data Tweet = Tweet
+  { content  :: String
+  , likes    :: Int
+  , comments :: [Tweet]
+  } deriving Show
+
+reply1 :: Tweet
+reply1 = Tweet { content = "Nice post!", likes = 5, comments = [] }
+
+reply2 :: Tweet
+reply2 = Tweet { content = "I agree", likes = 3, comments = [] }
+
+original :: Tweet
+original = Tweet
+  { content  = "Learning Haskell is fun!"
+  , likes    = 42
+  , comments = [reply1, reply2]
+  }
+
+
+
+7.HC9T7: Implement a Function to Calculate Engagement
+Create a function engagement that calculates the engagement of a Tweet by summing its likes and the engagement of its comments.
+
+module Main where
+
+data Tweet = Tweet
+  { content  :: String
+  , likes    :: Int
+  , comments :: [Tweet]
+  } deriving Show
+
+engagement :: Tweet -> Int
+engagement (Tweet _ l cs) = l + sum (map engagement cs)
+
+reply1 :: Tweet
+reply1 = Tweet { content = "Nice post!", likes = 5, comments = [] }
+
+reply2 :: Tweet
+reply2 = Tweet { content = "I agree", likes = 3, comments = [] }
+
+original :: Tweet
+original = Tweet
+  { content  = "Learning Haskell is fun!"
+  , likes    = 42
+  , comments = [reply1, reply2]
+  }
+
+main :: IO ()
+main = print (engagement original)  
+
+
+
+8.HC9T8: Define a Recursive Sequence Data Type
+Define a recursive data type Sequence a representing a linear sequence of nodes, each containing a value and pointing to the next node.
+
+module Main where
+
+data Sequence a = Node a (Sequence a) | End
+  deriving Show
+
+example :: Sequence Int
+example = Node 1 (Node 2 (Node 3 End))
+
+main :: IO ()
+main = print example
+
+
+
+9.HC9T9: Check for Element in a Sequence
+Create a function elemSeq that checks if a given element is inside a Sequence.
+
+module Main where
+
+data Sequence a = Node a (Sequence a) | End
+  deriving Show
+
+elemSeq :: Eq a => a -> Sequence a -> Bool
+elemSeq _ End          = False
+elemSeq x (Node y ys)
+  | x == y    = True
+  | otherwise = elemSeq x ys
+
+-- Example sequence: 1 -> 2 -> 3
+example :: Sequence Int
+example = Node 1 (Node 2 (Node 3 End))
+
+main :: IO ()
+main = do
+  print (elemSeq 2 example)   
+  print (elemSeq 4 example)  
+
+
+
+10.HC9T10: Binary Search Tree Data Type
+Define a binary search tree type BST a with constructors for an empty tree and a node containing a value and two subtrees.
+
+module Main where
+
+data BST a = Empty | Node a (BST a) (BST a)
+  deriving (Show, Eq)
+
+-- Example tree (optional)
+example :: BST Int
+example = Node 5 (Node 3 Empty Empty) (Node 7 Empty Empty)
+
+main :: IO ()
+main = print example
