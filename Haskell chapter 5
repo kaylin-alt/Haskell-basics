@@ -1,0 +1,88 @@
+module Main where
+
+import Data.Char (isUpper)
+
+-- HC5T1: Using applyThrice
+applyThrice :: (a -> a) -> a -> a
+applyThrice f x = f (f (f x))
+
+-- HC5T2: Filtering Odd Numbers
+filterOddNumbers :: [Int] -> [Int]
+filterOddNumbers = filter odd
+
+-- HC5T3: Checking for Uppercase Letters
+hasUppercaseStart :: [String] -> Bool
+hasUppercaseStart = any (\word -> not (null word) && isUpper (head word))
+
+-- HC5T4: Using Lambda Functions
+biggerThan10Lambda :: Int -> Bool
+biggerThan10Lambda = \x -> x > 10
+
+-- HC5T5: Partial Application
+multiplyByFive :: Int -> Int
+multiplyByFive = (* 5)
+
+-- HC5T6: Function Composition
+squareAndFilterEven :: [Int] -> [Int]
+squareAndFilterEven = filter even . map (^2)
+
+-- HC5T7: The $ Operator
+result :: Int
+result = sum $ map (*2) $ filter (>3) [1..10]
+
+-- HC5T8: Point-Free Style
+addFive :: Int -> Int
+addFive = (+ 5)
+
+-- HC5T9: Higher-Order Function to Transform a List
+transformList :: (a -> a) -> [a] -> [a]
+transformList f = map (f . f)
+
+-- HC5T10: Combining Higher-Order Functions
+anySquaredGreaterThan50 :: [Int] -> Bool
+anySquaredGreaterThan50 = any (>50) . map (^2)
+
+
+-- Main function to test all tasks
+main :: IO ()
+main = do
+  putStrLn "--- HC5T1: applyThrice Tests ---"
+  print (applyThrice (+1) 0)
+  print (applyThrice (*2) 1)
+  print (applyThrice (`div` 2) 16)
+
+  putStrLn "\n--- HC5T2: Filtering Odd Numbers Tests ---"
+  print (filterOddNumbers [1..30])
+
+  putStrLn "\n--- HC5T3: Checking for Uppercase Letters Tests ---"
+  print (hasUppercaseStart ["hello", "World", "Haskell"])
+  print (hasUppercaseStart ["apple", "banana", "cat"])
+  print (hasUppercaseStart [])
+  print (hasUppercaseStart ["", "Test"])
+
+  putStrLn "\n--- HC5T4: Using Lambda Functions Tests ---"
+  print (biggerThan10Lambda 15)
+  print (biggerThan10Lambda 8)
+
+  putStrLn "\n--- HC5T5: Partial Application Tests ---"
+  print (multiplyByFive 10)
+  print (multiplyByFive 3)
+
+  putStrLn "\n--- HC5T6: Function Composition Tests ---"
+  print (squareAndFilterEven [1, 2, 3, 4, 5, 6])
+
+  putStrLn "\n--- HC5T7: The $ Operator Tests ---"
+  print result
+
+  putStrLn "\n--- HC5T8: Point-Free Style Tests ---"
+  print (addFive 10)
+  print (addFive 0)
+
+  putStrLn "\n--- HC5T9: Higher-Order Function to Transform a List Tests ---"
+  print (transformList (+1) [1, 2, 3])
+  print (transformList (*2) [1, 2, 3])
+
+  putStrLn "\n--- HC5T10: Combining Higher-Order Functions Tests ---"
+  print (anySquaredGreaterThan50 [1, 5, 6, 7])
+  print (anySquaredGreaterThan50 [1, 5, 6, 8])
+  print (anySquaredGreaterThan50 [])
