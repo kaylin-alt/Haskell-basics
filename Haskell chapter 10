@@ -1,0 +1,110 @@
+HC10T1: Define a new type class ShowSimple that requires a function showSimple :: a -> String for simple string conversion. Implement an instance for PaymentMethod type.
+
+module Main where
+
+data PaymentMethod = Cash | Card | Cryptocurrency
+
+class ShowSimple a where
+  showSimple :: a -> String
+
+instance ShowSimple PaymentMethod where
+  showSimple Cash           = "cash"
+  showSimple Card           = "card"
+  showSimple Cryptocurrency = "crypto"
+
+main :: IO ()
+main = do
+  putStrLn (showSimple Cash)           
+  putStrLn (showSimple Card)           
+  putStrLn (showSimple Cryptocurrency) 
+
+
+
+2.HC10T2: Create a type class Summable that provides a sumUp :: [a] -> a. Implement it for the type Int.
+
+module Main where
+
+class Summable a where
+  sumUp :: [a] -> a
+
+instance Summable Int where
+  sumUp = foldr (+) 0
+
+main :: IO ()
+main = print (sumUp [1,2,3,4] :: Int)
+
+
+
+
+3.HC10T3: Define a type class Comparable with a function compareWith :: a -> a -> Ordering. Implement it for Blockchain.
+
+ module Main where
+
+data Block = Block Int String deriving (Eq, Show)  
+newtype Blockchain = Blockchain [Block] deriving (Eq, Show)
+
+class Comparable a where
+  compareWith :: a -> a -> Ordering
+
+instance Comparable Blockchain where
+  compareWith (Blockchain a) (Blockchain b) = compare (length a) (length b)
+
+main :: IO ()
+main = do
+  let bc1 = Blockchain [Block 0 "h0", Block 1 "h1"]
+      bc2 = Blockchain [Block 0 "h0"]
+  print (compareWith bc1 bc2)  
+
+
+
+4.HC10T4: Create a parameterized type Box a and make it an instance of Eq.
+
+module Main where
+
+newtype Box a = Box a
+
+instance Eq a => Eq (Box a) where
+  (Box x) == (Box y) = x == y
+
+instance Show a => Show (Box a) where
+  show (Box x) = "Box " ++ show x
+
+main :: IO ()
+main = do
+  let b1 = Box 5
+      b2 = Box 5
+      b3 = Box 7
+  print (b1 == b2)  
+  print (b1 == b3)  
+  print b1        
+
+
+
+  5.HC10T5: Define a type class ShowDetailed with a function showDetailed :: a -> String and implement it for a type User.
+
+  module Main where
+
+-- Type class
+class ShowDetailed a where
+  showDetailed :: a -> String
+
+-- User type
+data User = User
+  { name  :: String
+  , email :: String
+  , age   :: Int
+  } deriving (Eq, Show)
+
+-- Instance
+instance ShowDetailed User where
+  showDetailed (User n e a) =
+    "User Details:\n" ++
+    "  Name : " ++ n ++ "\n" ++
+    "  Email: " ++ e ++ "\n" ++
+    "  Age  : " ++ show a
+
+-- Example usage
+main :: IO ()
+main = do
+  let u = User "Alice" "alice@example.com" 30
+  putStrLn (showDetailed u
